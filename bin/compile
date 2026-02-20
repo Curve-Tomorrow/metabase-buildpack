@@ -12,3 +12,14 @@ mkdir -p $METABASE_DIR
 echo -n "-----> Downloading Metabase... from $METABASE_URL to $METABASE_JAR"
 curl -s --retry 3 -o $METABASE_JAR -L $METABASE_URL
 echo "done"
+
+PRUNE_JDK="${METABASE_PRUNE_JDK:-true}"
+if [ "$PRUNE_JDK" = "true" ] && [ -d "$1/.jdk" ]; then
+  echo "-----> Pruning JDK to reduce slug size"
+  rm -rf \
+    "$1/.jdk/demo" \
+    "$1/.jdk/include" \
+    "$1/.jdk/jmods" \
+    "$1/.jdk/man"
+  rm -f "$1/.jdk/lib/src.zip"
+fi
